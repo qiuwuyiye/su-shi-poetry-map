@@ -1,0 +1,25 @@
+# Generated dependencies and caches
+node_modules/
+__pycache__/
+.pycache/
+*.py[cod]
+.DS_Store
+
+# Large generated corpus artifacts
+corpus.db
+.source/shiyun-corpus/
+
+# Nested upstream repository metadata
+.source/su-shi-chronicle/.git/
+
+# Local screenshots and generated artwork
+render-*.png
+generated-assets/
+
+# Local environment and credentials
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx

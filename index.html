@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="把苏轼的诗词放回他走过的山河：地图、年龄、人生背景与白话解读。"
+    />
+    <title>东坡行旅 · 苏轼诗词地图</title>
+    <link rel="stylesheet" href="node_modules/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <aside class="story-panel" aria-label="苏轼诗词列表">
+        <header class="brand">
+          <div class="brand-mark" aria-hidden="true">轼</div>
+          <div>
+            <p class="eyebrow">诗词地理实验室 · DEMO</p>
+            <h1>东坡行旅</h1>
+          </div>
+        </header>
+
+        <section class="intro">
+          <p>缩放地图选择地点，再查看在那里写下的全部诗词。</p>
+          <div class="legend">
+            <span><i class="dot dot-cinnabar"></i>数字表示诗词数量</span>
+          </div>
+        </section>
+
+        <div class="section-heading">
+          <span id="collection-label">北宋 · 苏轼诗词地图</span>
+          <strong id="poem-count">6 首</strong>
+        </div>
+        <nav id="poem-list" class="poem-list" aria-label="诗词索引"></nav>
+
+        <footer class="panel-footer">
+          <span>地图坐标表示作品相关地点，不等同于精确写作点。</span>
+        </footer>
+      </aside>
+
+      <section class="map-stage" aria-label="苏轼诗词地图">
+        <div id="map" role="application" aria-label="可缩放的诗词地图"></div>
+
+        <div class="map-title">
+          <span id="map-title-kicker" class="map-title-kicker">中国东部 · 公元 1075—1082</span>
+          <span id="map-title-text">从密州意气，到黄州江月</span>
+        </div>
+
+        <div id="map-context" class="map-context">
+          <span class="context-overline">当前范围</span>
+          <strong>中国 · 山东 ↘ 湖北</strong>
+          <span>沿虚线查看苏轼的人生行旅</span>
+        </div>
+
+        <button id="reset-view" class="reset-button" type="button" aria-label="查看全部地点">
+          <span aria-hidden="true">⌖</span> 全部地点
+        </button>
+
+        <button id="open-corpus" class="corpus-button" type="button">
+          总库 <strong>763,547</strong>
+        </button>
+
+        <div id="map-hint" class="map-hint">点击地图标记，查看诗词与当时的人生</div>
+        <div id="map-error" class="map-error" role="status">
+          地图底图加载失败，请确认本地服务仍在运行后刷新。
+        </div>
+
+        <aside id="place-panel" class="place-panel" aria-live="polite">
+          <button id="close-place" class="close-button" type="button" aria-label="关闭地点诗词列表">×</button>
+          <header class="place-header">
+            <p id="place-region" class="detail-meta"></p>
+            <h2 id="place-title"></h2>
+            <p id="place-summary"></p>
+          </header>
+          <div id="place-poems" class="place-poems"></div>
+        </aside>
+
+        <article id="detail-card" class="detail-card" aria-live="polite">
+          <button id="close-detail" class="back-button" type="button" aria-label="返回地点诗词列表">← 返回此地诗词</button>
+          <div class="detail-media">
+            <img id="detail-image" alt="" />
+            <div id="media-placeholder" class="media-placeholder"></div>
+            <div class="image-wash"></div>
+            <div class="media-caption">
+              <span id="detail-year"></span>
+              <span id="detail-place"></span>
+            </div>
+          </div>
+
+          <div class="detail-content">
+            <div class="detail-header">
+              <div>
+                <p id="detail-meta" class="detail-meta"></p>
+                <h2 id="detail-title"></h2>
+              </div>
+              <span id="detail-stage" class="stage-badge"></span>
+            </div>
+
+            <blockquote id="detail-quote"></blockquote>
+
+            <div class="tabs" role="tablist" aria-label="诗词详情栏目">
+              <button class="tab is-active" data-tab="plain" role="tab" type="button">这首词在说什么</button>
+              <button class="tab" data-tab="background" role="tab" type="button">当时发生了什么</button>
+              <button class="tab" data-tab="original" role="tab" type="button">读原文</button>
+            </div>
+
+            <section id="tab-plain" class="tab-panel is-active" role="tabpanel">
+              <p id="detail-meaning" class="lead-copy"></p>
+              <p id="detail-subtext" class="sub-copy"></p>
+            </section>
+            <section id="tab-background" class="tab-panel" role="tabpanel">
+              <p id="detail-background" class="lead-copy"></p>
+              <p id="detail-source" class="source-note"></p>
+            </section>
+            <section id="tab-original" class="tab-panel poem-original" role="tabpanel">
+              <div id="detail-lines"></div>
+            </section>
+          </div>
+        </article>
+
+        <aside id="corpus-panel" class="corpus-panel" aria-live="polite">
+          <button id="close-corpus" class="close-button" type="button" aria-label="关闭全集">×</button>
+          <header class="corpus-header">
+            <p class="detail-meta">公版古典诗词 · 来源可追溯</p>
+            <h2 id="corpus-title">古典诗词总库</h2>
+            <p id="corpus-summary">763,547 篇 · 28,156 位作者 · 诗、词、曲</p>
+          </header>
+          <label class="corpus-search">
+            <span aria-hidden="true">⌕</span>
+            <input id="corpus-search" type="search" placeholder="搜索题目或诗句…" />
+          </label>
+          <label class="corpus-search author-search">
+            <span aria-hidden="true">人</span>
+            <input id="author-search" type="search" placeholder="筛选作者…" autocomplete="off" />
+          </label>
+          <div id="author-suggestions" class="author-suggestions"></div>
+          <div class="corpus-filters">
+            <button class="corpus-filter is-active" data-type="全部" type="button">全部</button>
+            <button class="corpus-filter" data-type="诗" type="button">诗</button>
+            <button class="corpus-filter" data-type="词" type="button">词</button>
+          </div>
+          <p id="corpus-result-count" class="corpus-result-count">正在载入全集…</p>
+          <div id="corpus-results" class="corpus-results"></div>
+          <button id="corpus-more" class="corpus-more" type="button">加载更多</button>
+        </aside>
+
+        <section class="timeline-panel" aria-label="按朝代和时间筛选">
+          <div class="dynasty-filter" role="group" aria-label="朝代">
+            <span>朝代</span>
+            <button class="dynasty-button" data-dynasty="xianqin" type="button">先秦</button>
+            <button class="dynasty-button" data-dynasty="qinhan" type="button">秦汉</button>
+            <button class="dynasty-button" data-dynasty="weijin" type="button">魏晋</button>
+            <button class="dynasty-button" data-dynasty="nanbeichao" type="button">南北朝</button>
+            <button class="dynasty-button" data-dynasty="sui" type="button">隋</button>
+            <button class="dynasty-button" data-dynasty="tang" type="button">唐</button>
+            <button class="dynasty-button is-active" data-dynasty="song" type="button">宋</button>
+            <button class="dynasty-button" data-dynasty="liao" type="button">辽</button>
+            <button class="dynasty-button" data-dynasty="jin" type="button">金</button>
+            <button class="dynasty-button" data-dynasty="yuan" type="button">元</button>
+            <button class="dynasty-button" data-dynasty="ming" type="button">明</button>
+            <button class="dynasty-button" data-dynasty="qing" type="button">清</button>
+          </div>
+          <div class="timeline-main">
+            <div class="timeline-labels">
+              <span>时间</span>
+              <strong id="time-range-label">1037—1101 · 苏轼一生</strong>
+              <button id="reset-time" type="button">重置</button>
+            </div>
+            <div class="range-wrap">
+              <div class="range-track"></div>
+              <div id="range-progress" class="range-progress"></div>
+              <input id="year-start" type="range" min="1037" max="1101" value="1037" aria-label="起始年份" />
+              <input id="year-end" type="range" min="1037" max="1101" value="1101" aria-label="结束年份" />
+            </div>
+            <div class="timeline-ticks" aria-hidden="true">
+              <span>1037</span><span>1061</span><span>1080</span><span>1101</span>
+            </div>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <noscript>这个 Demo 需要启用 JavaScript 才能显示地图。</noscript>
+    <script src="node_modules/leaflet/dist/leaflet.js"></script>
+    <script src="data.js"></script>
+    <script type="module" src="map-app-v2.js"></script>
+  </body>
+</html>

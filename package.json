@@ -1,0 +1,9 @@
+{
+  "name": "su-shi-poetry-map",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Interactive map demo for Su Shi's poetry",
+  "dependencies": {
+    "leaflet": "1.9.4"
+  }
+}

@@ -1,0 +1,3 @@
+[submodule ".source/su-shi-chronicle"]
+	path = .source/su-shi-chronicle
+	url = https://github.com/ztZhang0512/su-shi-chronicle.git
